@@ -60,10 +60,32 @@
 				<version>3.0.0-M7</version>
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>testng.xml</suiteXmlFile>
+						<suiteXmlFile>SuiteFile/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			
+			
+			-->
 		</plugins>
 	</build>
 
