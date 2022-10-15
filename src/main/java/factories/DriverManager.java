@@ -1,33 +1,48 @@
 package factories;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.ITestContext;
 
 public class DriverManager {
 	
 	private static WebDriver driver;
-	private static ConcurrentHashMap<WebDriver, Thread> threading = new ConcurrentHashMap<WebDriver, Thread>();
 	
+	public static DriverFactory driverFactory;
+	private static ConcurrentHashMap<Thread, WebDriver> webDrivers = new ConcurrentHashMap<Thread, WebDriver>();
+	private static ThreadLocal<ITestContext> contexts = new ThreadLocal<ITestContext>();
+	private static ConcurrentHashMap<ITestContext, List<Thread>> contextThreadMap = new ConcurrentHashMap<ITestContext, List<Thread>>();
 	
-	private static WebDriver initializeDriver() {
+	private static WebDriver initDriver() {
 		System.out.println("[!] initialize driver");
-		driver = null;
-		driver = new ChromeDriver();
+		
+		driver = driverFactory.getDriver(contexts.get());
+		webDrivers.put(Thread.currentThread(), driver);
+
 		return driver;
 	}
 	
+	public static void register(ITestContext context) {
+		if(context.getAttributeNames().size() > 0) {
+			contexts.set(context);
+			
+		}
+	}
+	
 	public static WebDriver get() {
-		System.out.println(Thread.currentThread());
+
 		if(driver == null) {
-			return initializeDriver();
+			return initDriver();
 		}else {
-			System.out.println("[!] return the driver");
 			return driver;
 		}
 		
-		
+	}
+	
+	public static void setDriverFactory(DriverFactory factory) {
+		driverFactory = factory;
 	}
 
 	public static void pauseThreadInSeconds(int seconds) {
